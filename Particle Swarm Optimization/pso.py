@@ -5,7 +5,7 @@ from math import sin, sqrt, exp, cos, pi
 import matplotlib.pyplot as plt
 
 iter_max = 10000
-pop_size = 100
+pop_size = 200
 dimensions = 2
 c1 = 2
 c2 = 2
@@ -28,12 +28,11 @@ def f6(param):
 
 def nlfun(param):
     '''Nonlinear function'''
-    para = param*10
     para = param[0:2]
     factor1 = sin(sqrt(para[0]**2 + para[1]**2)) / (sqrt(para[0]**2 + para[1]**2))
     factor2 = exp((cos(2*pi*para[0]) + cos(2*pi*para[1]))/2)
-    fun = factor1 + factor2 - 2.71289
-    error = 1 - fun
+    fun = factor1 + factor2
+    error = 3.718282 - fun
     return fun, error
 
 #initialize the particles
@@ -50,7 +49,7 @@ gbest = particles[0]
 best_fitness = []
 while i < iter_max :
     for p in particles:
-        fitness,  err = f6(p.params)
+        fitness,  err = nlfun(p.params)
         if fitness > p.fitness:
             p.fitness = fitness
             p.best = p.params
@@ -59,7 +58,7 @@ while i < iter_max :
             gbest = p
         v = p.v + c1 * random() * (p.best - p.params) \
                 + c2 * random() * (gbest.params - p.params)
-        p.params = p.params + v
+        p.params += v
 
     i += 1
     if np.abs(err) < err_crit:
